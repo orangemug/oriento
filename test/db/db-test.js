@@ -237,7 +237,7 @@ describe("Database API", function () {
       return db.insert().into("V").set({"message": "item1"}).one().then(function(data) {
         return db.insert().into("V").set({"message": "item2", item: data["@rid"]}).one();
       }).then(function(data) {
-        return db.select("expand(item)").from(data["@rid"]).one();
+        return db.select("expand(item)").from(data["@rid"]).fetch("item:1").one();
       }).then(function(data) {
         data.message.should.be.equal("item1");
       })
