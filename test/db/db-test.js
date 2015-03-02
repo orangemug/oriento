@@ -231,5 +231,18 @@ describe("Database API", function () {
       });
     });
 
+    it.only('should expand item', function () {
+      var db = this.db;
+      
+      return db.insert().into("V").set({"message": "item1"}).one().then(function(data) {
+        return db.insert().into("V").set({"message": "item2", item: data["@rid"]}).one();
+      }).then(function(data) {
+        return db.select("expand(item)").from(data["@rid"]).one();
+      }).then(function(data) {
+        data.message.should.be.equal("item1");
+      })
+
+    });
+
   });
 });
